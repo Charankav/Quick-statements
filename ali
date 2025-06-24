@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wikidata Description Generator</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; }
+    textarea, select, input, button { width: 100%; margin-bottom: 15px; padding: 10px; }
+    label { font-weight: bold; }
+    textarea { height: 100px; }
+    #output { height: 200px; }
+  </style>
+</head>
+<body>
+  <h1>Wikidata Description Generator</h1>
+
+  <label for="wikidataLinks">1. Wikidata Links (one per line)</label>
+  <textarea id="wikidataLinks" placeholder="https://www.wikidata.org/wiki/Q12345..."></textarea>
+
+  <label for="languageSelect">2. Choose Language</label>
+  <select id="languageSelect">
+    <option value="ml">Malayalam (ml)</option>
+    <option value="ar">Arabic (ar)</option>
+    <option value="hi">Hindi (hi)</option>
+  </select>
+
+  <label for="translatedDescription">3. Enter the Translated Description</label>
+  <input id="translatedDescription" type="text" placeholder="Enter the description...">
+
+  <button onclick="generateCommands()">4. Generate</button>
+
+  <label for="output">5. Descriptions Command</label>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    function generateCommands() {
+      const links = document.getElementById("wikidataLinks").value.trim().split("\n");
+      const lang = document.getElementById("languageSelect").value;
+      const desc = document.getElementById("translatedDescription").value;
+      const commands = links.map(link => {
+        const match = link.match(/Q\d+/);
+        return match ? `${match[0]}|D${lang}:"${desc}"` : "";
+      }).filter(cmd => cmd).join("\n");
+      document.getElementById("output").value = commands;
+    }
+  </script>
+</body>
+</html>
